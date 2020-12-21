@@ -9,6 +9,9 @@ require('admin-lte');
 
 window.Vue = require('vue');
 
+// Vue Router
+import router from './router';
+
 /**
  * This section of the code is used to import and configure javascript
  * libraries and dependencies. Including importing components creating
@@ -27,4 +30,5 @@ window.Swal = Swal
 
 const app = new Vue({
     el: '#app',
+    router,
 });
