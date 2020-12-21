@@ -23,6 +23,7 @@ Route::post('/logout', 'Auth\LogoutController@logout');
 */
 
 Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
+Route::get('/profile', 'Admin\DashboardController@index')->name('profile');
 
 /*
 |--------------------------------------------------------------------------

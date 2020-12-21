@@ -14,7 +14,7 @@
                 <img src="{{ Auth::user()->profile_picture ?? '/img/user.png' }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <router-link to="{{ '/profile/' . Auth::id() }}" class="d-block">
+                <router-link to="{{ '/profile/' . Auth::user()->username }}" class="d-block">
                     {{ Auth::user()->first_name .  ' ' . Auth::user()->last_name }}
                 </router-link>
             </div>
@@ -54,21 +54,21 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <router-link to="/rooms" class="nav-link">
+                        <i class="fas fa-hotel nav-icon"></i>
+                        <p>Rooms</p>
+                    </router-link>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-building"></i>
+                        <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Room Management
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <router-link to="/rooms" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Rooms</p>
-                            </router-link>
-                        </li>
                         <li class="nav-item">
                             <router-link to="/rooms/types" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -84,21 +84,21 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="/reservations" class="nav-link">
+                    <router-link to="/reservations" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
                             Reservations
                         </p>
-                    </a>
+                    </router-link>
                 </li>
                 <div class="separator" style="width: 100%; height: 1px; background-color: #4f5962; margin: .5rem 0 .75rem;"></div>
                 <li class="nav-item">
-                    <a href="/profile" class="nav-link">
+                    <router-link to="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Profile
                         </p>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item">
                     <a href="/logout" onclick="event.preventDefault(); document.getElementById('form').submit()" class="nav-link">
