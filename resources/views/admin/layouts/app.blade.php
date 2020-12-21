@@ -29,6 +29,10 @@
     </div>
     <!-- ./wrapper -->
 
+    <script>
+        const user = @json($user);
+        window.user = user;
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
     @stack('script')
 </body>

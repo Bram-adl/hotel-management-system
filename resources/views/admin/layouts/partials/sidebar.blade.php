@@ -24,7 +24,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <router-link to="/dashboard" class="nav-link">
+                    <router-link to="/dashboard" class="nav-link sidebar-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Dashboard
@@ -32,7 +32,7 @@
                     </router-link>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link sidebar-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             User Management
@@ -41,13 +41,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <router-link to="/users" class="nav-link">
+                            <router-link to="/users" class="nav-link sidebar-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Users</p>
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/customers" class="nav-link">
+                            <router-link to="/customers" class="nav-link sidebar-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customers</p>
                             </router-link>
@@ -55,13 +55,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/rooms" class="nav-link">
+                    <router-link to="/rooms" class="nav-link sidebar-link">
                         <i class="fas fa-hotel nav-icon"></i>
                         <p>Rooms</p>
                     </router-link>
                 </li>
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link sidebar-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>
                             Room Management
@@ -70,13 +70,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <router-link to="/rooms/types" class="nav-link">
+                            <router-link to="/rooms/types" class="nav-link sidebar-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Room Types</p>
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/rooms/services" class="nav-link">
+                            <router-link to="/rooms/services" class="nav-link sidebar-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Room Services</p>
                             </router-link>
@@ -84,7 +84,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <router-link to="/reservations" class="nav-link">
+                    <router-link to="/reservations" class="nav-link sidebar-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
                             Reservations
@@ -93,7 +93,7 @@
                 </li>
                 <div class="separator" style="width: 100%; height: 1px; background-color: #4f5962; margin: .5rem 0 .75rem;"></div>
                 <li class="nav-item">
-                    <router-link to="/profile" class="nav-link">
+                    <router-link to="/profile" class="nav-link sidebar-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Profile

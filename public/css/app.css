@@ -10921,3 +10921,8 @@ a.text-dark:focus {
   }
 }
 
+.router-link-active.sidebar-link {
+  background: linear-gradient(30deg, #3030b6, #4343df);
+  color: #fff !important;
+}
+

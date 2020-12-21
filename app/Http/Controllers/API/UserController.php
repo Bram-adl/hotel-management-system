@@ -15,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')->get();
+        $users = DB::table('users')
+                ->get();
 
         return $users;
     }
@@ -34,12 +35,16 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $username
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($username)
     {
-        //
+        $user = DB::table('users')
+                ->where('username', $username)
+                ->get();
+
+        return $user;
     }
 
     /**

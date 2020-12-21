@@ -10,10 +10,6 @@
 @endsection
 
 @push('script')
-<script>
-    const user = @json($user);
-</script>
-
 @if(session('status'))
 <script>
     const message = @json(session('status'));
