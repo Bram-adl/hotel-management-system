@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -41,11 +44,25 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only(['email_address', 'password']);
+        $request->validate([
+            'email_address' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-        if (Auth::attempt($credentials)) {
-            // Authentiaction passed ...
-            return redirect()->intended('dashboard')->with('status', 'Welcome back, ' . Auth::user()->username);
+        $user = User::where('email_address', $request->email_address)
+                ->first();
+        
+        if ( $user ) {
+            $credentials = $request->only(['email_address', 'password']);
+
+            if (Auth::attempt($credentials)) {
+                // Authentiaction passed ...
+                return redirect()->intended('dashboard')->with('status', 'Welcome back, ' . Auth::user()->username);
+            } else {
+                return redirect()->back()->with('error', 'The credentials did not match our records.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'The user is not registered yet.');
         }
     }
 }

@@ -12,6 +12,14 @@ window.Vue = require('vue');
 // Vue Router
 import router from './router';
 
+// V Form
+import { Form, HasError, AlertError } from 'vform'
+
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+
+window.Form = Form
+
 /**
  * This section of the code is used to import and configure javascript
  * libraries and dependencies. Including importing components creating
@@ -20,7 +28,27 @@ import router from './router';
 
 // Sweet Alert 2
 import Swal from 'sweetalert2';
+
 window.Swal = Swal
+
+// Vue Progress Bar
+import VueProgressBar from 'vue-progressbar'
+
+const options = {
+  color: '#bffaf3',
+  failedColor: '#874b4b',
+  thickness: '5px',
+  transition: {
+    speed: '0.2s',
+    opacity: '0.6s',
+    termination: 300
+  },
+  autoRevert: true,
+  location: 'top',
+  inverse: false
+}
+
+Vue.use(VueProgressBar, options)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

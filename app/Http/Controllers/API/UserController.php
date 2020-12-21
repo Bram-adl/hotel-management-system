@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -38,10 +40,11 @@ class UserController extends Controller
      * @param  int  $username
      * @return \Illuminate\Http\Response
      */
-    public function show($username)
+    public function show($id)
     {
         $user = DB::table('users')
-                ->where('username', $username)
+                ->where('id', $id)
+                ->select('id', 'username', 'first_name', 'last_name', 'email_address', 'level', 'profile_picture', 'background_picture')
                 ->get();
 
         return $user;
@@ -55,8 +58,75 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username,'.$request->id,
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email_address' => 'required|email|unique:users,email_address,'.$request->id,
+            'password' => 'sometimes|string|min:4',
+            'level' => 'sometimes|string',
+            'profile_picture' => 'sometimes|nullable|string',
+            'background_picture' => 'sometimes|nullable|string',
+        ]);
+
+        $user = User::find($id);
+        
+        $userProfilePicture = $user->profile_picture;
+        $userBackgroundPicture = $user->background_picture;
+
+        // return [
+        //     $userProfilePicture,
+        //     $request->profile_picture,
+        // ];
+        
+        // handles profile picture update
+        if ( $request->profile_picture != null && $request->profile_picture != $userProfilePicture ) {
+            // extract the extension and rename the image with unique name.
+            $extension = explode('/', $request->profile_picture)[1];
+            $extension = explode(';', $extension)[0];
+            $profile_picture = time() . '.' . $extension;
+            
+            // upload the image
+            \Image::make($request->profile_picture)->save(public_path('img/uploads/profile_pictures/') . $profile_picture);
+
+            // find the stored image in db and unlink it.
+            if (file_exists(public_path('img/uploads/profile_pictures/') . $userProfilePicture)) {
+                @unlink(public_path('img/uploads/profile_pictures/') . $userProfilePicture);
+            }
+            
+            $user->profile_picture = $profile_picture;
+            $user->save();
+        }
+        
+        // handles background picture update
+        if ( $request->background_picture != null && $request->background_picture != $userBackgroundPicture ) {
+            // extract the extension and rename the image with unique name.
+            $extension = explode('/', $request->background_picture)[1];
+            $extension = explode(';', $extension)[0];
+            $background_picture = time() . '.' . $extension;
+            
+            // upload the image
+            \Image::make($request->background_picture)->save(public_path('img/uploads/background_pictures/') . $background_picture);
+
+            // find the stored image in db and unlink it.
+            if (file_exists(public_path('img/uploads/background_pictures') . $userBackgroundPicture)) {
+                @unlink(public_path('img/uploads/background_pictures') . $userBackgroundPicture);
+            }
+            
+            $user->background_picture = $background_picture;
+            $user->save();
+        }
+
+        $user->username = $request->username;
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email_address = $request->email_address;
+        $user->password = Hash::make($request->password);
+        $user->level = $request->level;
+        $user->save();
+
+        return $user;
     }
 
     /**

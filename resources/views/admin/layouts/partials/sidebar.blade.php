@@ -11,7 +11,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{{ Auth::user()->profile_picture ?? '/img/user.png' }}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ '/img/uploads/profile_pictures/' . Auth::user()->profile_picture ?? '/img/user.png' }}" class="img-circle elevation-2" style="width: 36px; height: 36px; object-fit: cover;">
             </div>
             <div class="info">
                 <router-link to="{{ '/profile/' . Auth::user()->username }}" class="d-block">
@@ -93,7 +93,7 @@
                 </li>
                 <div class="separator" style="width: 100%; height: 1px; background-color: #4f5962; margin: .5rem 0 .75rem;"></div>
                 <li class="nav-item">
-                    <router-link to="/profile" class="nav-link sidebar-link">
+                    <router-link to="{{ '/profile/' . Auth::user()->id }}" class="nav-link sidebar-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Profile

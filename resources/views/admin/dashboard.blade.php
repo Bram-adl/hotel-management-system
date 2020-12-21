@@ -7,6 +7,7 @@
 
 @section('content')
 <router-view></router-view>
+<vue-progress-bar></vue-progress-bar>
 @endsection
 
 @push('script')
@@ -18,7 +19,6 @@
         position: 'top-end',
         showConfirmButton: false,
         timer: 2000,
-        timerProgressBar: true,
     })
 
     Toast.fire({

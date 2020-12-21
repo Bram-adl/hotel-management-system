@@ -35,9 +35,6 @@
                         </div>
                     </div>
                 </div>
-                @error('email_address')
-                    <span class="text-sm text-danger">{{ $message }}</span>
-                @enderror
                 
                 <div class="input-group mt-3">
                     <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Password">
@@ -47,9 +44,6 @@
                         </div>
                     </div>
                 </div>
-                @error('password')
-                    <span class="text-sm text-danger">{{ $message }}</span>
-                @enderror
                 
                 <div class="row mt-3">
                     <div class="col-8">
@@ -106,6 +100,24 @@
 
         Toast.fire({
             icon: 'success',
+            title: message,
+        });
+    </script>
+    @endif
+    @if (session('error'))
+    <script>
+        const message = @json(session('error'));
+        
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+        });
+
+        Toast.fire({
+            icon: 'error',
             title: message,
         });
     </script>

@@ -10,14 +10,14 @@ const routes = [
         component: require('../components/Dashboard.vue').default
     },
     {
-        path: '/profile',
-        name: 'profile',
-        component: require('../components/Profile.vue').default
+        path: '/users',
+        name: 'users',
+        component: require('../components/Users.vue').default
     },
     {
-        path: '/profile/:username',
-        name: 'profile_detail',
-        component: require('../components/ProfileDetail.vue').default
+        path: '/profile/:id',
+        name: 'profile',
+        component: require('../components/Profile.vue').default
     },
 ]
 
