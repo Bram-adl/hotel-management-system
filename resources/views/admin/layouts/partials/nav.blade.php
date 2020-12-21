@@ -6,10 +6,10 @@
             <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <router-link to="/dashboard" class="nav-link">Dashboard</router-link>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/profile" class="nav-link">Profile</a>
+            <router-link to="/profile" class="nav-link">Profile</router-link>
         </li>
     </ul>
 

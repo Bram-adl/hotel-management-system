@@ -11,10 +11,12 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="/img/user.png" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ Auth::user()->profile_picture ?? '/img/user.png' }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="/profile/user_id" class="d-block">Alexander Pierce</a>
+                <router-link to="{{ '/profile/' . Auth::id() }}" class="d-block">
+                    {{ Auth::user()->first_name .  ' ' . Auth::user()->last_name }}
+                </router-link>
             </div>
         </div>
 
@@ -22,12 +24,12 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <router-link to="/dashboard" class="nav-link">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
                             Dashboard
                         </p>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -39,16 +41,16 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/users" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Admins</p>
-                            </a>
+                                <p>Users</p>
+                            </router-link>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/customers" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customers</p>
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                 </li>
@@ -62,27 +64,27 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/rooms" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Rooms</p>
-                            </a>
+                            </router-link>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/rooms/types" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Room Types</p>
-                            </a>
+                            </router-link>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <router-link to="/rooms/services" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Room Services</p>
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/reservations" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
                             Reservations
@@ -91,7 +93,7 @@
                 </li>
                 <div class="separator" style="width: 100%; height: 1px; background-color: #4f5962; margin: .5rem 0 .75rem;"></div>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/profile" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Profile
