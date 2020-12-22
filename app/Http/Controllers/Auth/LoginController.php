@@ -56,7 +56,6 @@ class LoginController extends Controller
             $credentials = $request->only(['email_address', 'password']);
 
             if (Auth::attempt($credentials)) {
-                // Authentiaction passed ...
                 return redirect()->intended('dashboard')->with('status', 'Welcome back, ' . Auth::user()->username);
             } else {
                 return redirect()->back()->with('error', 'The credentials did not match our records.');

@@ -31,7 +31,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'username' => 'required|string|max:255',
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email_address' => 'required|email|unique:users,email_address',
+            'password' => 'required|string|min:4',
+        ]);
+
+        $user = DB::table('users')->insert([
+            'username' => $request->username,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email_address' => $request->email_address,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return $user;
     }
 
     /**
@@ -64,7 +80,7 @@ class UserController extends Controller
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'email_address' => 'required|email|unique:users,email_address,'.$request->id,
-            'password' => 'sometimes|string|min:4',
+            'password' => 'sometimes|nullable|min:4',
             'level' => 'sometimes|string',
             'profile_picture' => 'sometimes|nullable|string',
             'background_picture' => 'sometimes|nullable|string',
@@ -74,11 +90,6 @@ class UserController extends Controller
         
         $userProfilePicture = $user->profile_picture;
         $userBackgroundPicture = $user->background_picture;
-
-        // return [
-        //     $userProfilePicture,
-        //     $request->profile_picture,
-        // ];
         
         // handles profile picture update
         if ( $request->profile_picture != null && $request->profile_picture != $userProfilePicture ) {
@@ -117,12 +128,16 @@ class UserController extends Controller
             $user->background_picture = $background_picture;
             $user->save();
         }
+        
+        if ( $request->password != "" ) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
 
         $user->username = $request->username;
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email_address = $request->email_address;
-        $user->password = Hash::make($request->password);
         $user->level = $request->level;
         $user->save();
 
@@ -137,6 +152,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = DB::table('users')
+                ->where('id', $id)
+                ->delete();
+                
+        return $user;
     }
 }

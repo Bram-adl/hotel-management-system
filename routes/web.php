@@ -23,8 +23,8 @@ Route::post('/logout', 'Auth\LogoutController@logout');
 */
 
 Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
-Route::get('/profile', 'Admin\DashboardController@index')->name('profile');
-Route::get('/profile/{username}', 'Admin\DashboardController@index')->name('profile.detail');
+Route::get('/users', 'Admin\DashboardController@index')->name('users');
+Route::get('/profile/{id}', 'Admin\DashboardController@index')->name('profile');
 
 /*
 |--------------------------------------------------------------------------

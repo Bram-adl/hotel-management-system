@@ -16,3 +16,10 @@
     background: linear-gradient(30deg, rgb(48, 48, 182), rgb(67, 67, 223));
     color: #fff !important;
 }
+
+.profile-user-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+}
