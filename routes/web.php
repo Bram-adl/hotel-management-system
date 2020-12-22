@@ -26,6 +26,7 @@ Route::get('/dashboard', 'Admin\DashboardController@index')->name('dashboard');
 Route::get('/users', 'Admin\DashboardController@index')->name('users');
 Route::get('/customers', 'Admin\DashboardController@index')->name('customers');
 Route::get('/rooms', 'Admin\DashboardController@index')->name('rooms');
+Route::get('/rooms/{id}', 'Admin\DashboardController@index')->name('rooms.detail');
 Route::get('/room/types', 'Admin\DashboardController@index')->name('room.types');
 Route::get('/room/services', 'Admin\DashboardController@index')->name('room.services');
 Route::get('/reservations', 'Admin\DashboardController@index')->name('reservations');

@@ -30,6 +30,11 @@ const routes = [
         component: require('../components/Rooms.vue').default,
     },
     {
+        path: '/rooms/:id',
+        name: 'room_detail',
+        component: require('../components/RoomDetail.vue').default,
+    },
+    {
         path: '/room/types',
         name: 'room_types',
         component: require('../components/RoomTypes.vue').default,

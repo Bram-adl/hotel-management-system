@@ -9,16 +9,25 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4" v-for="(room, index) in 1" :key="index">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-success" @click="showCreateModal">
+                            <i class="fas fa-plus mr-1"></i>
+                            Add new room
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4" v-for="(room, index) in rooms" :key="index">
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
-                                <div class="p-5">
-                                    <h3 class="profile-username text-center">
-                                        Room name
+                                <div class="d-flex align-items-center justify-content-center flex-column" :class="room.photo ? 'text-white' : ''" style="height: 200px" :style="room.photo ? `background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.75)), url(/img/uploads/rooms/${room.photo}) center center/cover` : ''">
+                                    <h3 class="profile-username text-center mb-2">
+                                        {{ room.name }}
                                     </h3>
 
-                                    <p class="text-muted text-center">
-                                        Room type | 5 available rooms
+                                    <p class="text-center m-0" style="opacity: 0.75">
+                                        {{ room.type }} | {{ room.amount }} available rooms
                                     </p>
                                 </div>
 
@@ -27,24 +36,24 @@
                                 >
                                     <li class="list-group-item">
                                         <b>Room Price</b>
-                                        <a class="float-right">price</a>
+                                        <a class="float-right">$ {{ room.price }}</a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Room Size</b>
-                                        <a class="float-right">size</a>
+                                        <a class="float-right">{{ room.size }} m<sup>2</sup></a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Room Capacity</b>
-                                        <a class="float-right">capacity</a>
+                                        <a class="float-right">Maximum {{ room.capacity }} person(s)</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Room Services</b>
-                                        <a class="float-right">services</a>
+                                        <b>Bed Type</b>
+                                        <a class="float-right">{{ room.bed_type }}</a>
                                     </li>
                                 </ul>
 
                                 <router-link
-                                    :to="`/profile/${room.id}`"
+                                    :to="`/rooms/${room.id}`"
                                     class="btn btn-primary btn-block"
                                     >Check Room</router-link
                                 >
@@ -60,7 +69,6 @@
         <modal
             :title="method == 'create' ? 'Create new room' : 'Edit room'"
             :submit="method == 'create' ? 'Create room' : 'Update room'"
-            :method="method == 'create' ? 'create' : 'update'"
             @submitForm="submitForm"
         >
             <template>
@@ -89,8 +97,7 @@
                         }"
                     >
                         <option value="">Select Type</option>
-                        <option value="double">Double Room</option>
-                        <option value="triple">Triple Room</option>
+                        <option v-for="type in types" :key="type.id" :value="type.id">{{ type.name }}</option>
                     </select>
                 </div>
 
@@ -116,7 +123,7 @@
                             <span class="input-group-text">Upload</span>
                         </div>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="photo">
+                            <input type="file" class="custom-file-input" id="photo" @change="setPhoto">
                             <label class="custom-file-label" for="photo">Choose file</label>
                         </div>
                     </div>
@@ -140,7 +147,9 @@ export default {
 
     data: function () {
         return {
+            method: 'create',
             rooms: [],
+            types: [],
             form: new Form({
                 id: '',
                 photo: '',
@@ -148,72 +157,122 @@ export default {
                 room_type_id: '',
                 amount: '',
             }),
-            method: 'create',
         }
     },
 
     mounted: function () {
         this.fetchRooms()
+        this.fetchRoomTypes()
     },
 
     methods: {
-        showModal: function () {
+        showCreateModal: function () {
             this.method = 'create'
-            this.form.reset()
             this.form.clear()
-            $('#exampleModal').modal('show')
+            this.form.reset()
+            this.showModal()
         },
 
         showEditModal: function (room) {
             this.method = 'update'
             this.form.fill(room)
-            $('#exampleModal').modal('show')
-        },
-
-        closeModal: function () {
-            $('#exampleModal').modal('hide')
-        },
-
-        fireSwal: function (icon, title, message) {
-            Swal.fire(
-                icon,
-                title,
-                message,
-            )
-        },
-
-        fireToast: function (icon, message) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmedButton: true,
-                timer: 200,
-            })
-
-            Toast.fire(
-                icon,
-                title,
-            )
+            this.showModal()
         },
 
         submitForm: function () {
             this.method == 'create' ? this.createRoom() : this.updateRoom()
         },
+
+        validatePictures: function (file) {
+            const validExtensions = ['png', 'jpg', 'jpeg', 'svg']
+            const fileType = file.type.split('/')[file.type.split('/').length - 1]
+            const fileSize = file.size
+            const checkFileType = validExtensions.indexOf(fileType) < 0
+            const checkFileSize = fileSize > 2000000
+
+            if (checkFileType) return { success: false, message: 'The file is not supported!'}
+            if (checkFileSize) return { success: false, message: 'The file is too large' }
+            if (!checkFileSize && !checkFileType) return { success: true, }
+        },
+
+        setPhoto: function (e) {
+            const file = e.target.files[0]
+            const reader = new FileReader()
+
+            const validator = this.validatePictures(file)
+
+            if (!validator.success) return this.fireSwal('error', 'Failed!', validator.message)
+            else {
+                reader.onloadend = (file) => {
+                    this.form.photo = reader.result
+                }
+    
+                reader.readAsDataURL(file)
+            }
+
+        },
         
         fetchRooms: function () {
-            
+            axios.get("/api/rooms")
+                .then(({data}) => {
+                    this.rooms = data
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+
+        fetchRoomTypes: function () {
+            axios.get("/api/room/types")
+                .then(({data}) => {
+                    this.types = data
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         },
 
         createRoom: function () {
-
+            this.$Progress.start()
+            this.form.post("/api/rooms")
+                .then((response) => {
+                    this.$Progress.finish()
+                    this.fireToast('success', 'Room created successfully!')
+                    this.closeModal()
+                    this.fetchRooms()
+                })
+                .catch(() => {
+                    this.$Progress.fail()
+                })
         },
 
         updateRoom: function () {
 
         },
 
-        deleteRoom: function () {
-
+        deleteRoom: function (id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$Progress.start()
+                    axios.delete(`/api/rooms/${id}`)
+                        .then(response => {
+                            this.$Progress.finish()
+                            this.fireSwal("success", "Deleted!", "Room deleted successfully!")
+                            this.fetchRooms()
+                        })
+                        .catch(error => {
+                            this.$Progress.fail()
+                        })
+                }
+            })
         },
     }
 };
