@@ -2071,6 +2071,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2081,7 +2084,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      customers: [],
+      customers: {},
       method: 'create',
       form: new Form({
         id: "",
@@ -2097,48 +2100,45 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchCustomers();
   },
   methods: {
+    getResults: function getResults() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get("/api/customers?page=" + page).then(function (response) {
+        _this.customers = response.data;
+      });
+    },
+    showCreateModal: function showCreateModal() {
+      this.method = 'create';
+      this.form.clear();
+      this.form.reset();
+      this.showModal();
+    },
     showEditModal: function showEditModal(customer) {
       this.method = "update";
       this.form.fill(customer);
-      $("#exampleModal").modal("show");
+      this.showModal();
     },
     submitForm: function submitForm(method) {
       this.method == "create" ? this.createCustomer() : this.updateCustomer();
     },
     fetchCustomers: function fetchCustomers() {
-      var _this = this;
+      var _this2 = this;
 
-      axios.get("/api/customers").then(function (_ref) {
-        var data = _ref.data;
-        _this.customers = data;
+      axios.get("/api/customers").then(function (response) {
+        _this2.customers = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createCustomer: function createCustomer() {
-      var _this2 = this;
-
-      this.$Progress.start();
-      this.form.post("/api/customers").then(function (response) {
-        _this2.$Progress.finish();
-
-        _this2.fireToast("success", "Customer created successfully!");
-
-        _this2.closeModal();
-
-        _this2.fetchCustomers();
-      })["catch"](function (error) {
-        _this2.$Progress.fail();
-      });
-    },
-    updateCustomer: function updateCustomer() {
       var _this3 = this;
 
       this.$Progress.start();
-      this.form.put("/api/customers/".concat(this.form.id)).then(function (response) {
+      this.form.post("/api/customers").then(function (response) {
         _this3.$Progress.finish();
 
-        _this3.fireToast("success", "Customer updated successfully!");
+        _this3.fireToast("success", "Customer created successfully!");
 
         _this3.closeModal();
 
@@ -2147,8 +2147,24 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$Progress.fail();
       });
     },
-    deleteCustomer: function deleteCustomer(id) {
+    updateCustomer: function updateCustomer() {
       var _this4 = this;
+
+      this.$Progress.start();
+      this.form.put("/api/customers/".concat(this.form.id)).then(function (response) {
+        _this4.$Progress.finish();
+
+        _this4.fireToast("success", "Customer updated successfully!");
+
+        _this4.closeModal();
+
+        _this4.fetchCustomers();
+      })["catch"](function (error) {
+        _this4.$Progress.fail();
+      });
+    },
+    deleteCustomer: function deleteCustomer(id) {
+      var _this5 = this;
 
       Swal.fire({
         title: "Are you sure?",
@@ -2160,16 +2176,16 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this4.$Progress.start();
+          _this5.$Progress.start();
 
           axios["delete"]("/api/customers/".concat(id)).then(function (response) {
-            _this4.$Progress.finish();
+            _this5.$Progress.finish();
 
-            _this4.fireSwal("success", "Deleted!", "Customer deleted successfully!");
+            _this5.fireSwal("success", "Deleted!", "Customer deleted successfully!");
 
-            _this4.fetchCustomers();
+            _this5.fetchCustomers();
           })["catch"](function (error) {
-            _this4.$Progress.fail();
+            _this5.$Progress.fail();
           });
         }
       });
@@ -2781,6 +2797,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2792,9 +2811,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       method: "create",
-      reservations: [],
-      customers: [],
-      rooms: [],
+      reservations: {},
+      customers: {},
+      rooms: {},
       form: new Form({
         id: "",
         customer_id: "",
@@ -2812,6 +2831,14 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchRooms();
   },
   methods: {
+    getResults: function getResults() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get("/api/reservations?page=" + page).then(function (response) {
+        _this.reservations = response.data;
+      });
+    },
     showCreateModal: function showCreateModal() {
       this.method = "create";
       this.form.reset();
@@ -2827,59 +2854,42 @@ __webpack_require__.r(__webpack_exports__);
       this.method == "create" ? this.createReservation() : this.updateReservation();
     },
     fetchCustomers: function fetchCustomers() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get("/api/customers").then(function (_ref) {
         var data = _ref.data;
-        _this.customers = data;
+        _this2.customers = data;
       })["catch"](function (error) {
         console.log(errpr);
       });
     },
     fetchRooms: function fetchRooms() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/api/rooms").then(function (_ref2) {
         var data = _ref2.data;
-        _this2.rooms = data;
+        _this3.rooms = data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     fetchReservations: function fetchReservations() {
-      var _this3 = this;
+      var _this4 = this;
 
-      axios.get("/api/reservations").then(function (_ref3) {
-        var data = _ref3.data;
-        _this3.reservations = data;
+      axios.get("/api/reservations").then(function (response) {
+        _this4.reservations = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createReservation: function createReservation() {
-      var _this4 = this;
-
-      this.$Progress.start();
-      this.form.post("/api/reservations").then(function () {
-        _this4.$Progress.finish();
-
-        _this4.fireToast('success', 'Reservation created successfully!');
-
-        _this4.closeModal();
-
-        _this4.fetchReservations();
-      })["catch"](function () {
-        _this4.$Progress.fail();
-      });
-    },
-    updateReservation: function updateReservation() {
       var _this5 = this;
 
       this.$Progress.start();
-      this.form.put("/api/reservations/" + this.form.id).then(function () {
+      this.form.post("/api/reservations").then(function () {
         _this5.$Progress.finish();
 
-        _this5.fireToast('success', 'Reservation updated successfully!');
+        _this5.fireToast('success', 'Reservation created successfully!');
 
         _this5.closeModal();
 
@@ -2888,8 +2898,24 @@ __webpack_require__.r(__webpack_exports__);
         _this5.$Progress.fail();
       });
     },
-    deleteReservation: function deleteReservation(id) {
+    updateReservation: function updateReservation() {
       var _this6 = this;
+
+      this.$Progress.start();
+      this.form.put("/api/reservations/" + this.form.id).then(function () {
+        _this6.$Progress.finish();
+
+        _this6.fireToast('success', 'Reservation updated successfully!');
+
+        _this6.closeModal();
+
+        _this6.fetchReservations();
+      })["catch"](function () {
+        _this6.$Progress.fail();
+      });
+    },
+    deleteReservation: function deleteReservation(id) {
+      var _this7 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -2901,16 +2927,16 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this6.$Progress.start();
+          _this7.$Progress.start();
 
           axios["delete"]("/api/reservations/".concat(id)).then(function (response) {
-            _this6.$Progress.finish();
+            _this7.$Progress.finish();
 
-            _this6.fireSwal("success", "Deleted!", "Reservation deleted successfully!");
+            _this7.fireSwal("success", "Deleted!", "Reservation deleted successfully!");
 
-            _this6.fetchReservations();
+            _this7.fetchReservations();
           })["catch"](function (error) {
-            _this6.$Progress.fail();
+            _this7.$Progress.fail();
           });
         }
       });
@@ -4224,6 +4250,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4234,7 +4266,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      users: [],
+      users: {},
       method: 'create',
       authenticatedUser: user,
       form: new Form({
@@ -4254,6 +4286,14 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchUser();
   },
   methods: {
+    getResults: function getResults() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get("/api/users?page=" + page).then(function (response) {
+        _this.users = response.data;
+      });
+    },
     profilePicture: function profilePicture(user) {
       if (user.profile_picture != null) {
         if (user.profile_picture.startsWith("data")) {
@@ -4269,33 +4309,32 @@ __webpack_require__.r(__webpack_exports__);
       method == "create" ? this.createUser() : '';
     },
     fetchUser: function fetchUser() {
-      var _this = this;
+      var _this2 = this;
 
-      axios.get("/api/users").then(function (_ref) {
-        var data = _ref.data;
-        _this.users = data;
+      axios.get("/api/users").then(function (response) {
+        _this2.users = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createUser: function createUser() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.$Progress.start();
       this.form.post("/api/users").then(function (response) {
-        _this2.$Progress.finish();
+        _this3.$Progress.finish();
 
-        _this2.fireSwal("success", "User created successfully!");
+        _this3.fireSwal("success", "User created successfully!");
 
-        _this2.closeModal();
+        _this3.closeModal();
 
-        _this2.fetchUser();
+        _this3.fetchUser();
       })["catch"](function (error) {
-        _this2.$Progress.fail();
+        _this3.$Progress.fail();
       });
     },
     deleteUser: function deleteUser(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -4307,16 +4346,16 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this3.$Progress.start();
+          _this4.$Progress.start();
 
           axios["delete"]("/api/users/".concat(id)).then(function (response) {
-            _this3.$Progress.finish();
+            _this4.$Progress.finish();
 
-            _this3.fireSwal("success", "Deleted!", "User deleted successfully!");
+            _this4.fireSwal("success", "Deleted!", "User deleted successfully!");
 
-            _this3.fetchUser();
+            _this4.fetchUser();
           })["catch"](function (error) {
-            _this3.$Progress.fail();
+            _this4.$Progress.fail();
           });
         }
       });
@@ -46000,11 +46039,7 @@ var render = function() {
                       {
                         staticClass: "btn btn-success",
                         attrs: { type: "submit" },
-                        on: {
-                          click: function($event) {
-                            return _vm.showModal(_vm.form)
-                          }
-                        }
+                        on: { click: _vm.showCreateModal }
                       },
                       [
                         _c("i", { staticClass: "fas fa-plus mr-1" }),
@@ -46022,7 +46057,7 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.customers, function(customer, index) {
+                      _vm._l(_vm.customers.data, function(customer, index) {
                         return _c("tr", { key: customer.id }, [
                           _c("td", [_vm._v(_vm._s(index + 1))]),
                           _vm._v(" "),
@@ -46068,7 +46103,19 @@ var render = function() {
                       0
                     )
                   ])
-                ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer" },
+                  [
+                    _c("pagination", {
+                      attrs: { data: _vm.customers },
+                      on: { "pagination-change-page": _vm.getResults }
+                    })
+                  ],
+                  1
+                )
               ])
             ])
           ])
@@ -47075,7 +47122,10 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.reservations, function(reservation, index) {
+                      _vm._l(_vm.reservations.data, function(
+                        reservation,
+                        index
+                      ) {
                         return _c("tr", { key: reservation.id }, [
                           _c("td", [_vm._v(_vm._s(index + 1))]),
                           _vm._v(" "),
@@ -47143,7 +47193,19 @@ var render = function() {
                       0
                     )
                   ])
-                ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer" },
+                  [
+                    _c("pagination", {
+                      attrs: { data: _vm.reservations },
+                      on: { "pagination-change-page": _vm.getResults }
+                    })
+                  ],
+                  1
+                )
               ])
             ])
           ])
@@ -47224,7 +47286,7 @@ var render = function() {
                     [_vm._v("Select Customer")]
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.customers, function(customer) {
+                  _vm._l(_vm.customers.data, function(customer) {
                     return _c(
                       "option",
                       {
@@ -47308,7 +47370,7 @@ var render = function() {
                     [_vm._v("Select Room")]
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.rooms, function(room) {
+                  _vm._l(_vm.rooms.data, function(room) {
                     return _c(
                       "option",
                       {
@@ -48948,7 +49010,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "row" },
-            _vm._l(_vm.users, function(user) {
+            _vm._l(_vm.users.data, function(user) {
               return _c("div", { key: user.id, staticClass: "col-md-4" }, [
                 _c("div", { staticClass: "card card-primary card-outline" }, [
                   _c(
@@ -49044,7 +49106,21 @@ var render = function() {
               ])
             }),
             0
-          )
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-12" },
+              [
+                _c("pagination", {
+                  attrs: { data: _vm.users },
+                  on: { "pagination-change-page": _vm.getResults }
+                })
+              ],
+              1
+            )
+          ])
         ])
       ]),
       _vm._v(" "),

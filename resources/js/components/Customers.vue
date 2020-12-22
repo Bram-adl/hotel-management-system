@@ -17,7 +17,7 @@
                                 </h3>
 
                                 <div class="card-tools">
-                                    <button type="submit" class="btn btn-success" @click="showModal(form)">
+                                    <button type="submit" class="btn btn-success" @click="showCreateModal">
                                         <i class="fas fa-plus mr-1"></i>
                                         Create new customer
                                     </button>
@@ -38,7 +38,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(customer, index) in customers" :key="customer.id">
+                                        <tr v-for="(customer, index) in customers.data" :key="customer.id">
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ customer.first_name }}</td>
                                             <td>{{ customer.last_name }}</td>
@@ -54,6 +54,9 @@
                                 </table>
                             </div>
                             <!-- /.card-body -->
+                            <div class="card-footer">
+                                <pagination :data="customers" @pagination-change-page="getResults"></pagination>
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -156,7 +159,7 @@ export default {
 
     data: function() {
         return {
-            customers: [],
+            customers: {},
             method: 'create',
             form: new Form({
                 id: "",
@@ -174,10 +177,24 @@ export default {
     },
 
     methods: {
+        getResults: function (page = 1) {
+            axios.get("/api/customers?page=" + page)
+                .then(response => {
+                    this.customers = response.data
+                })
+        },
+
+        showCreateModal: function () {
+            this.method = 'create'
+            this.form.clear()
+            this.form.reset()
+            this.showModal()
+        },
+        
         showEditModal: function (customer) {
             this.method = "update";
             this.form.fill(customer);
-            $("#exampleModal").modal("show");
+            this.showModal()
         },
         
         submitForm: function(method) {
@@ -186,8 +203,8 @@ export default {
 
         fetchCustomers: function () {
             axios.get("/api/customers")
-                .then(({ data }) => {
-                    this.customers = data
+                .then((response) => {
+                    this.customers = response.data
                 })
                 .catch(error => {
                     console.log(error)

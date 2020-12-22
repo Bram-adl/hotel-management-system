@@ -45,7 +45,7 @@
                                     <tbody>
                                         <tr
                                             v-for="(reservation,
-                                            index) in reservations"
+                                            index) in reservations.data"
                                             :key="reservation.id"
                                         >
                                             <td>{{ index + 1 }}</td>
@@ -92,6 +92,9 @@
                                 </table>
                             </div>
                             <!-- /.card-body -->
+                            <div class="card-footer">
+                                <pagination :data="reservations" @pagination-change-page="getResults"></pagination>
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -121,7 +124,7 @@
                     }"
                 >
                     <option value="" selected hidden disabled>Select Customer</option>
-                    <option v-for="customer in customers" :key="customer.id" :value="customer.id" :selected="customer.id == form.customer_id">{{ customer.first_name + ' ' + customer.last_name }}</option>
+                    <option v-for="customer in customers.data" :key="customer.id" :value="customer.id" :selected="customer.id == form.customer_id">{{ customer.first_name + ' ' + customer.last_name }}</option>
                 </select>
                 <has-error :form="form" field="customer_id"></has-error>
             </div>
@@ -137,7 +140,7 @@
                     }"
                 >
                     <option value="" selected hidden disabled>Select Room</option>
-                    <option v-for="room in rooms" :key="room.id" :value="room.id" :selected="room.id == form.room_id">{{ room.name }}</option>
+                    <option v-for="room in rooms.data" :key="room.id" :value="room.id" :selected="room.id == form.room_id">{{ room.name }}</option>
                 </select>
                 <has-error :form="form" field="room_id"></has-error>
             </div>
@@ -216,9 +219,9 @@ export default {
     data: function() {
         return {
             method: "create",
-            reservations: [],
-            customers: [],
-            rooms: [],
+            reservations: {},
+            customers: {},
+            rooms: {},
             form: new Form({
                 id: "",
                 customer_id: "",
@@ -238,6 +241,13 @@ export default {
     },
 
     methods: {
+        getResults: function (page = 1) {
+            axios.get("/api/reservations?page=" + page)
+                .then(response => {
+                    this.reservations = response.data
+                })
+        },
+        
         showCreateModal: function() {
             this.method = "create";
             this.form.reset();
@@ -280,8 +290,8 @@ export default {
         fetchReservations: function() {
             axios
                 .get("/api/reservations")
-                .then(({ data }) => {
-                    this.reservations = data;
+                .then((response) => {
+                    this.reservations = response.data;
                 })
                 .catch(error => {
                     console.log(error);

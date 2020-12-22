@@ -16,7 +16,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = DB::table('customers')
-                        ->get();
+                        ->paginate(5);
         
         return $customers;
     }

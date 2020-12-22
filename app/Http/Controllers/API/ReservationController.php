@@ -24,7 +24,7 @@ class ReservationController extends Controller
                                 'rooms.name AS room_name', 'reservations.room_id',
                                 'reservations.check_in', 'reservations.check_out','reservations.guests', 'reservations.rooms',
                             )
-                            ->get();
+                            ->paginate(5);
 
         return $reservations;
     }

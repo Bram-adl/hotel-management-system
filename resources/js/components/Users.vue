@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4" v-for="user in users" :key="user.id">
+                    <div class="col-md-4" v-for="user in users.data" :key="user.id">
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <div class="text-center">
@@ -67,6 +67,12 @@
                             </div>
                             <!-- /.card-body -->
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <pagination :data="users" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
             </div>
@@ -167,7 +173,7 @@ export default {
 
     data: function() {
         return {
-            users: [],
+            users: {},
             method: 'create',
 
             authenticatedUser: user,
@@ -191,6 +197,13 @@ export default {
     },
 
     methods: {
+        getResults: function (page = 1) {
+            axios.get("/api/users?page=" + page)
+                .then(response => {
+                    this.users = response.data
+                })
+        },
+        
         profilePicture: function(user) {
             if (user.profile_picture != null) {
                 if (user.profile_picture.startsWith("data")) {
@@ -210,8 +223,8 @@ export default {
         fetchUser: function() {
             axios
                 .get(`/api/users`)
-                .then(({ data }) => {
-                    this.users = data;
+                .then((response) => {
+                    this.users = response.data;
                 })
                 .catch(error => {
                     console.log(error);
