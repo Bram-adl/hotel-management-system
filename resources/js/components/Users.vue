@@ -155,7 +155,7 @@
 
 <script>
 import ContentHeader from "./layouts/ContentHeader";
-import Modal from "./Modal";
+import Modal from "./layouts/Modal";
 
 export default {
     name: "Profile",
@@ -266,11 +266,7 @@ export default {
                     axios.delete(`/api/users/${id}`)
                         .then(response => {
                             this.$Progress.finish()
-                            Swal.fire(
-                                'Deleted!',
-                                'Your file has been deleted.',
-                                'success'
-                            )
+                            this.fireSwal("success", "Deleted!", "User deleted successfully!")
                             this.fetchUser()
                         })
                         .catch(error => {

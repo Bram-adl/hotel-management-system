@@ -19,6 +19,11 @@ const routes = [
         name: 'profile',
         component: require('../components/Profile.vue').default
     },
+    {
+        path: '/customers',
+        name: 'customers',
+        component: require('../components/Customers.vue').default
+    },
 ]
 
 export default new VueRouter({
