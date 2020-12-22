@@ -16,7 +16,8 @@ class RoomTypeController extends Controller
     public function index()
     {
         $types = DB::table('room_types')
-            ->get();
+            ->paginate(5);
+
         return $types;
     }
 

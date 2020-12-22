@@ -50,6 +50,9 @@ const options = {
 
 Vue.use(VueProgressBar, options);
 
+// Laravel Vue Pagination
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 // Global Methods
 Vue.mixin({
     methods: {

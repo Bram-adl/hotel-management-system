@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,7 +37,26 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'customer_id' => 'required|numeric',
+            'room_id' => 'required|numeric',
+            'check_in' => 'required|date',
+            'check_out' => 'required|date',
+            'guests' => 'required|numeric',
+            'rooms' => 'required|numeric',
+        ]);
+
+        $reservation = DB::table('reservations')
+            ->insert([
+                'customer_id' => $request->customer_id,
+                'room_id' => $request->room_id,
+                'check_in' => $request->check_in,
+                'check_out' => $request->check_out,
+                'guests' => $request->guests,
+                'rooms' => $request->rooms,
+            ]);
+
+        return $reservation;
     }
 
     /**
@@ -59,7 +79,27 @@ class ReservationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'customer_id' => 'required|numeric',
+            'room_id' => 'required|numeric',
+            'check_in' => 'required|date',
+            'check_out' => 'required|date',
+            'guests' => 'required|numeric',
+            'rooms' => 'required|numeric',
+        ]);
+
+        $reservation = DB::table('reservations')
+                            ->where('id', $id)
+                            ->update([
+                                'customer_id' => $request->customer_id,
+                                'room_id' => $request->room_id,
+                                'check_in' => $request->check_in,
+                                'check_out' => $request->check_out,
+                                'guests' => $request->guests,
+                                'rooms' => $request->rooms,
+                            ]);
+
+        return $reservation;
     }
 
     /**
@@ -70,6 +110,10 @@ class ReservationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $reservation = DB::table('reservations')
+                            ->where('id', $id)
+                            ->delete();
+
+        return $reservation;
     }
 }

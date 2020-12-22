@@ -29,7 +29,7 @@
                                 </h3>
 
                                 <p class="text-center" style="opacity: 0.75">
-                                    {{ room.type }} |
+                                    {{ type.name }} |
                                     {{ room.amount }} available room(s) left
                                 </p>
                             </div>
@@ -201,6 +201,14 @@ export default {
                 photo: ""
             })
         };
+    },
+
+    computed: {
+        type: function () {
+            return this.types.filter(type => {
+                return type.id == this.room.room_type_id
+            })[0]
+        }
     },
 
     mounted: function() {

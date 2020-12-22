@@ -79,7 +79,7 @@
                                                 <button
                                                     class="btn btn-sm btn-danger"
                                                     @click="
-                                                        deleteCustomer(
+                                                        deleteReservation(
                                                             reservation.id
                                                         )
                                                     "
@@ -288,9 +288,58 @@ export default {
                 });
         },
 
-        createReservation: function() {},
+        createReservation: function() {
+            this.$Progress.start()
+            this.form.post("/api/reservations")
+                .then(() => {
+                    this.$Progress.finish()
+                    this.fireToast('success', 'Reservation created successfully!')
+                    this.closeModal()
+                    this.fetchReservations()
+                })
+                .catch(() => {
+                    this.$Progress.fail()
+                })
+        },
 
-        updateReservation: function() {}
+        updateReservation: function() {
+            this.$Progress.start()
+            this.form.put("/api/reservations/" + this.form.id)
+                .then(() => {
+                    this.$Progress.finish()
+                    this.fireToast('success', 'Reservation updated successfully!')
+                    this.closeModal()
+                    this.fetchReservations()
+                })
+                .catch(() => {
+                    this.$Progress.fail()
+                })
+        },
+
+        deleteReservation: function (id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$Progress.start()
+                    axios.delete(`/api/reservations/${id}`)
+                        .then(response => {
+                            this.$Progress.finish()
+                            this.fireSwal("success", "Deleted!", "Reservation deleted successfully!")
+                            this.fetchReservations()
+                        })
+                        .catch(error => {
+                            this.$Progress.fail()
+                        })
+                }
+            })
+        }
     }
 };
 </script>

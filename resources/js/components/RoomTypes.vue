@@ -45,7 +45,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="(type, index) in types" :key="type.id">
+                                        <tr v-for="(type, index) in types.data" :key="type.id">
                                             <td>{{ index + 1 }}</td>
                                             <td>{{ type.name }}</td>
                                             <td>$ {{ type.price }}</td>
@@ -73,6 +73,9 @@
                                 </table>
                             </div>
                             <!-- /.card-body -->
+                            <div class="card-footer">
+                                <pagination :data="types" @pagination-change-page="getResults"></pagination>
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -176,7 +179,7 @@ export default {
     data: function() {
         return {
             method: "create",
-            types: [],
+            types: {},
             form: new Form({
                 id: "",
                 name: "",
@@ -193,6 +196,13 @@ export default {
     },
 
     methods: {
+        getResults(page = 1) {
+			axios.get('/api/room/types?page=' + page)
+				.then(response => {
+					this.types = response.data;
+				});
+		},
+        
         showCreateModal: function() {
             this.method = "create";
             this.form.clear();
@@ -213,8 +223,8 @@ export default {
         fetchTypes: function() {
             axios
                 .get("/api/room/types")
-                .then(({ data }) => {
-                    this.types = data;
+                .then(response => {
+                    this.types = response.data;
                 })
                 .catch(error => {
                     console.log(error);
