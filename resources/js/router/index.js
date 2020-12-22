@@ -24,6 +24,26 @@ const routes = [
         name: 'customers',
         component: require('../components/Customers.vue').default
     },
+    {
+        path: '/rooms',
+        name: 'rooms',
+        component: require('../components/Rooms.vue').default,
+    },
+    {
+        path: '/room/types',
+        name: 'room_types',
+        component: require('../components/RoomTypes.vue').default,
+    },
+    {
+        path: '/room/services',
+        name: 'room_services',
+        component: require('../components/RoomServices.vue').default,
+    },
+    {
+        path: '/reservations',
+        name: 'reservations',
+        component: require('../components/Reservations.vue').default,
+    }
 ]
 
 export default new VueRouter({

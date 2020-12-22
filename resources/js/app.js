@@ -4,21 +4,21 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
-require('admin-lte');
+require("./bootstrap");
+require("admin-lte");
 
-window.Vue = require('vue');
+window.Vue = require("vue");
 
 // Vue Router
-import router from './router';
+import router from "./router";
 
 // V Form
-import { Form, HasError, AlertError } from 'vform'
+import { Form, HasError, AlertError } from "vform";
 
-Vue.component(HasError.name, HasError)
-Vue.component(AlertError.name, AlertError)
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
 
-window.Form = Form
+window.Form = Form;
 
 /**
  * This section of the code is used to import and configure javascript
@@ -27,29 +27,59 @@ window.Form = Form
  */
 
 // Sweet Alert 2
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
-window.Swal = Swal
+window.Swal = Swal;
 
 // Vue Progress Bar
-import VueProgressBar from 'vue-progressbar'
+import VueProgressBar from "vue-progressbar";
 
 const options = {
-  color: '#bffaf3',
-  failedColor: '#874b4b',
-  thickness: '5px',
-  transition: {
-    speed: '0.2s',
-    opacity: '0.6s',
-    termination: 300
-  },
-  autoRevert: true,
-  location: 'top',
-  inverse: false
-}
+    color: "#bffaf3",
+    failedColor: "#874b4b",
+    thickness: "5px",
+    transition: {
+        speed: "0.2s",
+        opacity: "0.6s",
+        termination: 300,
+    },
+    autoRevert: true,
+    location: "top",
+    inverse: false,
+};
 
-Vue.use(VueProgressBar, options)
+Vue.use(VueProgressBar, options);
 
+// Global Methods
+Vue.mixin({
+    methods: {
+        fireToast: function (icon, title) {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+            });
+
+            Toast.fire({
+                icon,
+                title,
+            });
+        },
+
+        fireSwal: function (icon, title, message) {
+            Swal.fire(title, message, icon);
+        },
+
+        showModal: function () {
+            $('#exampleModal').modal('show')
+        },
+
+        closeModal: function () {
+            $("#exampleModal").modal("hide");
+        },
+    },
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -58,6 +88,6 @@ Vue.use(VueProgressBar, options)
  */
 
 const app = new Vue({
-    el: '#app',
+    el: "#app",
     router,
 });

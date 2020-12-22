@@ -17,7 +17,7 @@
                                 </h3>
 
                                 <div class="card-tools">
-                                    <button type="submit" class="btn btn-success" @click="showModal">
+                                    <button type="submit" class="btn btn-success" @click="showModal(form)">
                                         <i class="fas fa-plus mr-1"></i>
                                         Create new customer
                                     </button>
@@ -174,47 +174,14 @@ export default {
     },
 
     methods: {
-        showModal: function () {
-            this.method = "create"
-            this.form.reset()
-            this.form.clear()
-            $("#exampleModal").modal('show')
-        },
-
         showEditModal: function (customer) {
-            this.method = "update"
-            this.form.fill(customer)
-            $("#exampleModal").modal("show")
-        },
-
-        closeModal: function () {
-            $("#exampleModal").modal('hide')
+            this.method = "update";
+            this.form.fill(customer);
+            $("#exampleModal").modal("show");
         },
         
         submitForm: function(method) {
             this.method == "create" ? this.createCustomer() : this.updateCustomer();
-        },
-
-        fireToast: function (icon, title) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-            })
-
-            Toast.fire({
-                icon,
-                title,
-            })
-        },
-
-        fireSwal: function (icon, title, message) {
-            Swal.fire(
-                title,
-                message,
-                icon
-            )
         },
 
         fetchCustomers: function () {

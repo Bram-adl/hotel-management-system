@@ -189,28 +189,6 @@ export default {
             }    
         },
         
-        fireToast: function (icon, title) {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000,
-            })
-
-            Toast.fire({
-                icon: icon,
-                title: title,
-            })
-        },
-
-        fireSwal: function (icon, title, message) {
-            Swal.fire(
-                title,
-                message,
-                icon,
-            )
-        },
-        
         validatePictures: function (file) {
             const validExtensions = ['png', 'jpg', 'jpeg', 'svg']
             const fileType = file.type.split('/')[file.type.split('/').length - 1]
@@ -278,8 +256,6 @@ export default {
             
             this.form.put(`/api/users/${this.form.id}`)
                 .then(response => {
-                    return console.log(response.data)
-                    
                     this.$Progress.finish()
                     this.fetchUser()
                     location.reload()

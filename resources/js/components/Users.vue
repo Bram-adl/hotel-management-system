@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-3">
                     <div class="col-md-12 text-right">
-                        <button class="btn btn-success" @click="showModal">
+                        <button class="btn btn-success" @click="showModal(form)">
                             Add new user
                         </button>
                     </div>
@@ -168,6 +168,7 @@ export default {
     data: function() {
         return {
             users: [],
+            method: 'create',
 
             authenticatedUser: user,
 
@@ -200,24 +201,6 @@ export default {
             } else {
                 return "/img/user.png";
             }
-        },
-
-        showModal: function() {
-            this.form.reset()
-            this.form.clear()
-            $("#exampleModal").modal("show");
-        },
-
-        closeModal: function () {
-            $("#exampleModal").modal("hide");
-        },
-
-        fireSwal: function (icon, title, message) {
-            Swal.fire(
-                title,
-                message,
-                icon,
-            )
         },
 
         submitForm: function (method) {
