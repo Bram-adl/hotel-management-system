@@ -2849,6 +2849,159 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _layouts_ContentHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layouts/ContentHeader */ "./resources/js/components/layouts/ContentHeader.vue");
+/* harmony import */ var _layouts_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./layouts/Modal */ "./resources/js/components/layouts/Modal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2861,10 +3014,114 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'RoomServices',
+  name: "RoomServices",
   components: {
-    ContentHeader: _layouts_ContentHeader__WEBPACK_IMPORTED_MODULE_0__["default"]
+    ContentHeader: _layouts_ContentHeader__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Modal: _layouts_Modal__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      method: "create",
+      types: [],
+      form: new Form({
+        id: "",
+        name: "",
+        price: "",
+        size: "",
+        capacity: "",
+        bed_type: ""
+      })
+    };
+  },
+  mounted: function mounted() {
+    this.fetchTypes();
+  },
+  methods: {
+    showCreateModal: function showCreateModal() {
+      this.method = "create";
+      this.form.clear();
+      this.form.reset();
+      this.showModal();
+    },
+    showEditModal: function showEditModal(type) {
+      this.method = "update";
+      this.form.fill(type);
+      this.showModal();
+    },
+    submitForm: function submitForm(method) {
+      this.method == "create" ? this.createType() : this.updateType();
+    },
+    fetchTypes: function fetchTypes() {
+      var _this = this;
+
+      axios.get("/api/room/types").then(function (_ref) {
+        var data = _ref.data;
+        _this.types = data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    createType: function createType() {
+      var _this2 = this;
+
+      this.$Progress.start();
+      this.form.post("/api/room/types").then(function () {
+        _this2.$Progress.finish();
+
+        _this2.fireToast('success', 'Type created successfully!');
+
+        _this2.closeModal();
+
+        _this2.fetchTypes();
+      })["catch"](function () {
+        _this2.$Progress.fail();
+      });
+    },
+    updateType: function updateType() {
+      var _this3 = this;
+
+      this.$Progress.start();
+      this.form.put("/api/room/types/".concat(this.form.id)).then(function () {
+        _this3.$Progress.finish();
+
+        _this3.fireToast('success', 'Type updated successfully!');
+
+        _this3.closeModal();
+
+        _this3.fetchTypes();
+      })["catch"](function () {
+        _this3.$Progress.fail();
+      });
+    },
+    deleteType: function deleteType(id) {
+      var _this4 = this;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          _this4.$Progress.start();
+
+          axios["delete"]("/api/room/types/".concat(id)).then(function (response) {
+            _this4.$Progress.finish();
+
+            _this4.fireSwal("success", "Deleted!", "Type deleted successfully!");
+
+            _this4.fetchTypes();
+          })["catch"](function (error) {
+            _this4.$Progress.fail();
+          });
+        }
+      });
+    }
   }
 });
 
@@ -45695,7 +45952,7 @@ var render = function() {
     [
       _c(
         "content-header",
-        { attrs: { page: "Room Services" } },
+        { attrs: { page: "Room Types" } },
         [
           [
             _c(
@@ -45710,17 +45967,330 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("li", { staticClass: "breadcrumb-item active" }, [
-              _vm._v("Room Services")
+              _vm._v("Room Types")
             ])
           ]
         ],
         2
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "content" }, [
+        _c("div", { staticClass: "container-fluid" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c("h3", { staticClass: "card-title" }, [
+                    _vm._v(
+                      "\n                                Room Types Table\n                            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-tools" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" },
+                        on: { click: _vm.showCreateModal }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-plus mr-1" }),
+                        _vm._v(
+                          "\n                                    Create new type\n                                "
+                        )
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                  _c("table", { staticClass: "table table-hover" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.types, function(type, index) {
+                        return _c("tr", { key: type.id }, [
+                          _c("td", [_vm._v(_vm._s(index + 1))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(type.name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v("$ " + _vm._s(type.price))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(_vm._s(type.size) + " m"),
+                            _c("sup", [_vm._v("2")])
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              "Maximum " + _vm._s(type.capacity) + " person(s)"
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(type.bed_type))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-success",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.showEditModal(type)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-edit" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-danger",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteType(type.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-trash" })]
+                            )
+                          ])
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "modal",
+        {
+          attrs: {
+            title: _vm.method == "create" ? "Create new type" : "Update type",
+            submit: _vm.method == "create" ? "Create type" : "Update type"
+          },
+          on: { submitForm: _vm.submitForm }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "name" } }, [_vm._v("Type name")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.name,
+                    expression: "form.name"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("name")
+                },
+                attrs: { type: "text", id: "name" },
+                domProps: { value: _vm.form.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "name", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "name" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "price" } }, [_vm._v("Base Price")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.price,
+                    expression: "form.price"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("price")
+                },
+                attrs: { type: "number", step: "0.01", id: "price" },
+                domProps: { value: _vm.form.price },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "price", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "price" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "size" } }, [_vm._v("Room Size")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.size,
+                    expression: "form.size"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("size")
+                },
+                attrs: { type: "number", step: "1", id: "size" },
+                domProps: { value: _vm.form.size },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "size", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "size" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "capacity" } }, [
+                _vm._v("Maximum Capacity")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.capacity,
+                    expression: "form.capacity"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("capacity")
+                },
+                attrs: { type: "number", step: "0.01", id: "capacity" },
+                domProps: { value: _vm.form.capacity },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "capacity", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "capacity" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "bed_type" } }, [_vm._v("Bed Type")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.bed_type,
+                    expression: "form.bed_type"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("bed_type")
+                },
+                attrs: { type: "text", id: "bed_type" },
+                domProps: { value: _vm.form.bed_type },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "bed_type", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "bed_type" } })
+            ],
+            1
+          )
+        ]
       )
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("No")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Type Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Base Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Room Size")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Maximum Capacity")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Bed Type")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
