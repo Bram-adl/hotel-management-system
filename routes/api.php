@@ -24,4 +24,5 @@ Route::apiResources([
     'rooms' => 'API\RoomController',
     'room/types' => 'API\RoomTypeController',
     'room/services' => 'API\RoomServiceController',
+    'reservations' => 'API\ReservationController',
 ]);

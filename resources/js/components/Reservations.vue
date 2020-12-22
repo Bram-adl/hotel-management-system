@@ -9,21 +9,288 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Reservations Table
+                                </h3>
+
+                                <div class="card-tools">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                        @click="showCreateModal"
+                                    >
+                                        <i class="fas fa-plus mr-1"></i>
+                                        Create new reservation
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Customer Name</th>
+                                            <th>Room Name</th>
+                                            <th>Check In</th>
+                                            <th>Check Out</th>
+                                            <th>Room Booked</th>
+                                            <th>Guests Count</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            v-for="(reservation,
+                                            index) in reservations"
+                                            :key="reservation.id"
+                                        >
+                                            <td>{{ index + 1 }}</td>
+                                            <td>
+                                                {{ reservation.first_name }}
+                                                {{ reservation.last_name }}
+                                            </td>
+                                            <td>{{ reservation.room_name }}</td>
+                                            <td>{{ reservation.check_in }}</td>
+                                            <td>{{ reservation.check_out }}</td>
+                                            <td>
+                                                {{ reservation.rooms }} room(s)
+                                            </td>
+                                            <td>
+                                                {{
+                                                    reservation.guests
+                                                }}
+                                                person(s)
+                                            </td>
+                                            <td>
+                                                <button
+                                                    class="btn btn-sm btn-success"
+                                                    @click="
+                                                        showEditModal(
+                                                            reservation
+                                                        )
+                                                    "
+                                                >
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-sm btn-danger"
+                                                    @click="
+                                                        deleteCustomer(
+                                                            reservation.id
+                                                        )
+                                                    "
+                                                >
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
                 </div>
             </div>
         </div>
+
+        <modal
+            :title="
+                method == 'create'
+                    ? 'Create new reservation'
+                    : 'Update reservation'
+            "
+            :submit="
+                method == 'create' ? 'Create reservation' : 'Update reservation'
+            "
+            @submitForm="submitForm"
+        >
+            <div class="form-group">
+                <label for="customer_id">Customer Name</label>
+                <select 
+                    v-model="form.customer_id" 
+                    id="customer_id"
+                    class="form-control"
+                    :class="{
+                        'is-invalid': form.errors.has('customer_id')
+                    }"
+                >
+                    <option value="" selected hidden disabled>Select Customer</option>
+                    <option v-for="customer in customers" :key="customer.id" :value="customer.id" :selected="customer.id == form.customer_id">{{ customer.first_name + ' ' + customer.last_name }}</option>
+                </select>
+                <has-error :form="form" field="customer_id"></has-error>
+            </div>
+
+            <div class="form-group">
+                <label for="room_id">Room Name</label>
+                <select 
+                    v-model="form.room_id" 
+                    id="room_id"
+                    class="form-control"
+                    :class="{
+                        'is-invalid': form.errors.has('room_id')
+                    }"
+                >
+                    <option value="" selected hidden disabled>Select Room</option>
+                    <option v-for="room in rooms" :key="room.id" :value="room.id" :selected="room.id == form.room_id">{{ room.name }}</option>
+                </select>
+                <has-error :form="form" field="room_id"></has-error>
+            </div>
+
+            <div class="form-group">
+                <label for="check_in">Check In</label>
+                <input 
+                    v-model="form.check_in"
+                    type="date"
+                    id="check_in"
+                    class="form-control"
+                    :class="{
+                        'is-invalid': form.errors.has('check_in')
+                    }"
+                >
+                <has-error :form="form" field="check_in"></has-error>
+            </div>
+
+            <div class="form-group">
+                <label for="check_out">Check Out</label>
+                <input 
+                    v-model="form.check_out"
+                    type="date"
+                    id="check_out"
+                    class="form-control"
+                    :class="{
+                        'is-invalid': form.errors.has('check_out')
+                    }"
+                >
+                <has-error :form="form" field="check_out"></has-error>
+            </div>
+
+            <div class="form-group">
+                <label for="guests">Number of Guests</label>
+                <input 
+                    v-model="form.guests"
+                    type="number"
+                    id="guests"
+                    class="form-control"
+                    :class="{
+                        'is-invalid': form.errors.has('guests')
+                    }"
+                >
+                <has-error :form="form" field="guests"></has-error>
+            </div>
+
+            <div class="form-group">
+                <label for="rooms">Number of Rooms</label>
+                <input 
+                    v-model="form.rooms"
+                    type="number"
+                    id="rooms"
+                    class="form-control"
+                    :class="{
+                        'is-invalid': form.errors.has('rooms')
+                    }"
+                >
+                <has-error :form="form" field="rooms"></has-error>
+            </div>
+        </modal>
     </div>
 </template>
 
 <script>
-import ContentHeader from './layouts/ContentHeader'
+import ContentHeader from "./layouts/ContentHeader";
+import Modal from "./layouts/Modal";
 
 export default {
-    name: 'Reservations',
+    name: "Reservations",
 
     components: {
         ContentHeader,
+        Modal
+    },
+
+    data: function() {
+        return {
+            method: "create",
+            reservations: [],
+            customers: [],
+            rooms: [],
+            form: new Form({
+                id: "",
+                customer_id: "",
+                room_id: "",
+                check_in: "",
+                check_out: "",
+                guests: "",
+                rooms: ""
+            })
+        };
+    },
+
+    mounted: function() {
+        this.fetchReservations();
+        this.fetchCustomers();
+        this.fetchRooms();
+    },
+
+    methods: {
+        showCreateModal: function() {
+            this.method = "create";
+            this.form.reset();
+            this.form.clear();
+            this.showModal();
+        },
+
+        showEditModal: function(reservation) {
+            this.method = "update";
+            this.form.fill(reservation);
+            this.showModal();
+        },
+
+        submitForm: function() {
+            this.method == "create"
+                ? this.createReservation()
+                : this.updateReservation();
+        },
+
+        fetchCustomers: function () {
+            axios.get("/api/customers")
+                .then(({ data }) => {
+                    this.customers = data
+                })
+                .catch(error => {
+                    console.log(errpr)
+                })
+        },
+
+        fetchRooms: function () {
+            axios.get("/api/rooms")
+                .then(({ data }) => {
+                    this.rooms = data
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+
+        fetchReservations: function() {
+            axios
+                .get("/api/reservations")
+                .then(({ data }) => {
+                    this.reservations = data;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+
+        createReservation: function() {},
+
+        updateReservation: function() {}
     }
 };
 </script>

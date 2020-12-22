@@ -2577,6 +2577,192 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _layouts_ContentHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./layouts/ContentHeader */ "./resources/js/components/layouts/ContentHeader.vue");
+/* harmony import */ var _layouts_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./layouts/Modal */ "./resources/js/components/layouts/Modal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2596,10 +2782,82 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'Reservations',
+  name: "Reservations",
   components: {
-    ContentHeader: _layouts_ContentHeader__WEBPACK_IMPORTED_MODULE_0__["default"]
+    ContentHeader: _layouts_ContentHeader__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Modal: _layouts_Modal__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      method: "create",
+      reservations: [],
+      customers: [],
+      rooms: [],
+      form: new Form({
+        id: "",
+        customer_id: "",
+        room_id: "",
+        check_in: "",
+        check_out: "",
+        guests: "",
+        rooms: ""
+      })
+    };
+  },
+  mounted: function mounted() {
+    this.fetchReservations();
+    this.fetchCustomers();
+    this.fetchRooms();
+  },
+  methods: {
+    showCreateModal: function showCreateModal() {
+      this.method = "create";
+      this.form.reset();
+      this.form.clear();
+      this.showModal();
+    },
+    showEditModal: function showEditModal(reservation) {
+      this.method = "update";
+      this.form.fill(reservation);
+      this.showModal();
+    },
+    submitForm: function submitForm() {
+      this.method == "create" ? this.createReservation() : this.updateReservation();
+    },
+    fetchCustomers: function fetchCustomers() {
+      var _this = this;
+
+      axios.get("/api/customers").then(function (_ref) {
+        var data = _ref.data;
+        _this.customers = data;
+      })["catch"](function (error) {
+        console.log(errpr);
+      });
+    },
+    fetchRooms: function fetchRooms() {
+      var _this2 = this;
+
+      axios.get("/api/rooms").then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.rooms = data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    fetchReservations: function fetchReservations() {
+      var _this3 = this;
+
+      axios.get("/api/reservations").then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.reservations = data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    createReservation: function createReservation() {},
+    updateReservation: function updateReservation() {}
   }
 });
 
@@ -46097,7 +46355,448 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      _vm._m(0)
+      _c("div", { staticClass: "content" }, [
+        _c("div", { staticClass: "container-fluid" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-12" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c("h3", { staticClass: "card-title" }, [
+                    _vm._v(
+                      "\n                                Reservations Table\n                            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "card-tools" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" },
+                        on: { click: _vm.showCreateModal }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-plus mr-1" }),
+                        _vm._v(
+                          "\n                                    Create new reservation\n                                "
+                        )
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                  _c("table", { staticClass: "table table-hover" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.reservations, function(reservation, index) {
+                        return _c("tr", { key: reservation.id }, [
+                          _c("td", [_vm._v(_vm._s(index + 1))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              "\n                                            " +
+                                _vm._s(reservation.first_name) +
+                                "\n                                            " +
+                                _vm._s(reservation.last_name) +
+                                "\n                                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(reservation.room_name))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(reservation.check_in))]),
+                          _vm._v(" "),
+                          _c("td", [_vm._v(_vm._s(reservation.check_out))]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              "\n                                            " +
+                                _vm._s(reservation.rooms) +
+                                " room(s)\n                                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _vm._v(
+                              "\n                                            " +
+                                _vm._s(reservation.guests) +
+                                "\n                                            person(s)\n                                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-success",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.showEditModal(reservation)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-edit" })]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-danger",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.deleteCustomer(reservation.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-trash" })]
+                            )
+                          ])
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "modal",
+        {
+          attrs: {
+            title:
+              _vm.method == "create"
+                ? "Create new reservation"
+                : "Update reservation",
+            submit:
+              _vm.method == "create"
+                ? "Create reservation"
+                : "Update reservation"
+          },
+          on: { submitForm: _vm.submitForm }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "customer_id" } }, [
+                _vm._v("Customer Name")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.customer_id,
+                      expression: "form.customer_id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.form.errors.has("customer_id")
+                  },
+                  attrs: { id: "customer_id" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.form,
+                        "customer_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "option",
+                    {
+                      attrs: {
+                        value: "",
+                        selected: "",
+                        hidden: "",
+                        disabled: ""
+                      }
+                    },
+                    [_vm._v("Select Customer")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.customers, function(customer) {
+                    return _c(
+                      "option",
+                      {
+                        key: customer.id,
+                        domProps: {
+                          value: customer.id,
+                          selected: customer.id == _vm.form.customer_id
+                        }
+                      },
+                      [
+                        _vm._v(
+                          _vm._s(customer.first_name + " " + customer.last_name)
+                        )
+                      ]
+                    )
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("has-error", {
+                attrs: { form: _vm.form, field: "customer_id" }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "room_id" } }, [_vm._v("Room Name")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.room_id,
+                      expression: "form.room_id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.form.errors.has("room_id")
+                  },
+                  attrs: { id: "room_id" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.form,
+                        "room_id",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "option",
+                    {
+                      attrs: {
+                        value: "",
+                        selected: "",
+                        hidden: "",
+                        disabled: ""
+                      }
+                    },
+                    [_vm._v("Select Room")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.rooms, function(room) {
+                    return _c(
+                      "option",
+                      {
+                        key: room.id,
+                        domProps: {
+                          value: room.id,
+                          selected: room.id == _vm.form.room_id
+                        }
+                      },
+                      [_vm._v(_vm._s(room.name))]
+                    )
+                  })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "room_id" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "check_in" } }, [_vm._v("Check In")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.check_in,
+                    expression: "form.check_in"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("check_in")
+                },
+                attrs: { type: "date", id: "check_in" },
+                domProps: { value: _vm.form.check_in },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "check_in", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "check_in" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "check_out" } }, [
+                _vm._v("Check Out")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.check_out,
+                    expression: "form.check_out"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("check_out")
+                },
+                attrs: { type: "date", id: "check_out" },
+                domProps: { value: _vm.form.check_out },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "check_out", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "check_out" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "guests" } }, [
+                _vm._v("Number of Guests")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.guests,
+                    expression: "form.guests"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("guests")
+                },
+                attrs: { type: "number", id: "guests" },
+                domProps: { value: _vm.form.guests },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "guests", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "guests" } })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group" },
+            [
+              _c("label", { attrs: { for: "rooms" } }, [
+                _vm._v("Number of Rooms")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.rooms,
+                    expression: "form.rooms"
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.form.errors.has("rooms")
+                },
+                attrs: { type: "number", id: "rooms" },
+                domProps: { value: _vm.form.rooms },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "rooms", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("has-error", { attrs: { form: _vm.form, field: "rooms" } })
+            ],
+            1
+          )
+        ]
+      )
     ],
     1
   )
@@ -46107,9 +46806,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "content" }, [
-      _c("div", { staticClass: "container-fluid" }, [
-        _c("div", { staticClass: "row" })
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("No")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Customer Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Room Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Check In")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Check Out")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Room Booked")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Guests Count")]),
+        _vm._v(" "),
+        _c("th")
       ])
     ])
   }
