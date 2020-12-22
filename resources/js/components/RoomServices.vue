@@ -43,7 +43,7 @@
                                     </thead>
                                     <tbody>
                                         <tr
-                                            v-for="(service, index) in services"
+                                            v-for="(service, index) in services.data"
                                             :key="service.id"
                                         >
                                             <td>{{ index + 1 }}</td>
@@ -68,6 +68,9 @@
                                 </table>
                             </div>
                             <!-- /.card-body -->
+                            <div class="card-footer">
+                                <pagination :data="services" @pagination-change-page="getResults"></pagination>
+                            </div>
                         </div>
                         <!-- /.card -->
                     </div>
@@ -124,7 +127,7 @@ export default {
 
     data: function() {
         return {
-            services: [],
+            services: {},
             method: "create",
             form: new Form({
                 id: "",
@@ -139,6 +142,13 @@ export default {
     },
 
     methods: {
+        getResults: function (page = 1) {
+            axios.get("/api/room/services?page=" + page)
+                .then(response => {
+                    this.services = response.data
+                })
+        },
+        
         showCreateModal: function () {
             this.method = 'create'
             this.form.reset()
@@ -158,8 +168,8 @@ export default {
 
         fetchServices: function() {
             axios.get("/api/room/services")
-                .then(({data}) => {
-                    this.services = data
+                .then((response) => {
+                    this.services = response.data
                 })
                 .catch(error => {
                     console.log(error)

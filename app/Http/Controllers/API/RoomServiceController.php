@@ -16,7 +16,7 @@ class RoomServiceController extends Controller
     public function index()
     {
         $services = DB::table('services')
-                        ->get();
+                        ->paginate(5);
 
         return $services;
     }

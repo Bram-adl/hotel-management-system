@@ -23,7 +23,7 @@ class RoomController extends Controller
                         'room_types.name AS type', 'room_types.price', 'room_types.size',
                         'room_types.capacity', 'room_types.bed_type',
                     )
-                    ->get();
+                    ->paginate(3);
         
         return $rooms;
     }

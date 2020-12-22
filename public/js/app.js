@@ -3346,6 +3346,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3356,7 +3359,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      services: [],
+      services: {},
       method: "create",
       form: new Form({
         id: "",
@@ -3369,6 +3372,14 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchServices();
   },
   methods: {
+    getResults: function getResults() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get("/api/room/services?page=" + page).then(function (response) {
+        _this.services = response.data;
+      });
+    },
     showCreateModal: function showCreateModal() {
       this.method = 'create';
       this.form.reset();
@@ -3384,39 +3395,22 @@ __webpack_require__.r(__webpack_exports__);
       this.method == "create" ? this.createService() : this.updateService();
     },
     fetchServices: function fetchServices() {
-      var _this = this;
+      var _this2 = this;
 
-      axios.get("/api/room/services").then(function (_ref) {
-        var data = _ref.data;
-        _this.services = data;
+      axios.get("/api/room/services").then(function (response) {
+        _this2.services = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createService: function createService() {
-      var _this2 = this;
-
-      this.$Progress.start();
-      this.form.post("/api/room/services").then(function () {
-        _this2.$Progress.finish();
-
-        _this2.fireToast('success', 'Service created successfully!');
-
-        _this2.closeModal();
-
-        _this2.fetchServices();
-      })["catch"](function () {
-        _this2.$Progress.fail();
-      });
-    },
-    updateService: function updateService() {
       var _this3 = this;
 
       this.$Progress.start();
-      this.form.put("/api/room/services/".concat(this.form.id)).then(function () {
+      this.form.post("/api/room/services").then(function () {
         _this3.$Progress.finish();
 
-        _this3.fireToast('success', 'Service updated successfully!');
+        _this3.fireToast('success', 'Service created successfully!');
 
         _this3.closeModal();
 
@@ -3425,8 +3419,24 @@ __webpack_require__.r(__webpack_exports__);
         _this3.$Progress.fail();
       });
     },
-    deleteService: function deleteService(id) {
+    updateService: function updateService() {
       var _this4 = this;
+
+      this.$Progress.start();
+      this.form.put("/api/room/services/".concat(this.form.id)).then(function () {
+        _this4.$Progress.finish();
+
+        _this4.fireToast('success', 'Service updated successfully!');
+
+        _this4.closeModal();
+
+        _this4.fetchServices();
+      })["catch"](function () {
+        _this4.$Progress.fail();
+      });
+    },
+    deleteService: function deleteService(id) {
+      var _this5 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -3438,16 +3448,16 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this4.$Progress.start();
+          _this5.$Progress.start();
 
           axios["delete"]("/api/room/services/".concat(id)).then(function (response) {
-            _this4.$Progress.finish();
+            _this5.$Progress.finish();
 
-            _this4.fireSwal("success", "Deleted!", "Service deleted successfully!");
+            _this5.fireSwal("success", "Deleted!", "Service deleted successfully!");
 
-            _this4.fetchServices();
+            _this5.fetchServices();
           })["catch"](function (error) {
-            _this4.$Progress.fail();
+            _this5.$Progress.fail();
           });
         }
       });
@@ -3901,6 +3911,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3912,8 +3927,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       method: 'create',
-      rooms: [],
-      types: [],
+      rooms: {},
+      types: {},
       form: new Form({
         id: '',
         photo: '',
@@ -3928,15 +3943,18 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchRoomTypes();
   },
   methods: {
+    getResults: function getResults() {
+      var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get("/api/rooms?page=" + page).then(function (response) {
+        _this.rooms = response.data;
+      });
+    },
     showCreateModal: function showCreateModal() {
       this.method = 'create';
       this.form.clear();
       this.form.reset();
-      this.showModal();
-    },
-    showEditModal: function showEditModal(room) {
-      this.method = 'update';
-      this.form.fill(room);
       this.showModal();
     },
     submitForm: function submitForm() {
@@ -3961,58 +3979,55 @@ __webpack_require__.r(__webpack_exports__);
       };
     },
     setPhoto: function setPhoto(e) {
-      var _this = this;
+      var _this2 = this;
 
       var file = e.target.files[0];
       var reader = new FileReader();
       var validator = this.validatePictures(file);
       if (!validator.success) return this.fireSwal('error', 'Failed!', validator.message);else {
         reader.onloadend = function (file) {
-          _this.form.photo = reader.result;
+          _this2.form.photo = reader.result;
         };
 
         reader.readAsDataURL(file);
       }
     },
     fetchRooms: function fetchRooms() {
-      var _this2 = this;
+      var _this3 = this;
 
-      axios.get("/api/rooms").then(function (_ref) {
-        var data = _ref.data;
-        _this2.rooms = data;
+      axios.get("/api/rooms").then(function (response) {
+        _this3.rooms = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     fetchRoomTypes: function fetchRoomTypes() {
-      var _this3 = this;
+      var _this4 = this;
 
-      axios.get("/api/room/types").then(function (_ref2) {
-        var data = _ref2.data;
-        _this3.types = data;
+      axios.get("/api/room/types").then(function (response) {
+        _this4.types = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     createRoom: function createRoom() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$Progress.start();
       this.form.post("/api/rooms").then(function (response) {
-        _this4.$Progress.finish();
+        _this5.$Progress.finish();
 
-        _this4.fireToast('success', 'Room created successfully!');
+        _this5.fireToast('success', 'Room created successfully!');
 
-        _this4.closeModal();
+        _this5.closeModal();
 
-        _this4.fetchRooms();
+        _this5.fetchRooms();
       })["catch"](function () {
-        _this4.$Progress.fail();
+        _this5.$Progress.fail();
       });
     },
-    updateRoom: function updateRoom() {},
     deleteRoom: function deleteRoom(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       Swal.fire({
         title: 'Are you sure?',
@@ -4024,16 +4039,16 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this5.$Progress.start();
+          _this6.$Progress.start();
 
           axios["delete"]("/api/rooms/".concat(id)).then(function (response) {
-            _this5.$Progress.finish();
+            _this6.$Progress.finish();
 
-            _this5.fireSwal("success", "Deleted!", "Room deleted successfully!");
+            _this6.fireSwal("success", "Deleted!", "Room deleted successfully!");
 
-            _this5.fetchRooms();
+            _this6.fetchRooms();
           })["catch"](function (error) {
-            _this5.$Progress.fail();
+            _this6.$Progress.fail();
           });
         }
       });
@@ -47939,7 +47954,7 @@ var render = function() {
                     _vm._v(" "),
                     _c(
                       "tbody",
-                      _vm._l(_vm.services, function(service, index) {
+                      _vm._l(_vm.services.data, function(service, index) {
                         return _c("tr", { key: service.id }, [
                           _c("td", [_vm._v(_vm._s(index + 1))]),
                           _vm._v(" "),
@@ -47979,7 +47994,19 @@ var render = function() {
                       0
                     )
                   ])
-                ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-footer" },
+                  [
+                    _c("pagination", {
+                      attrs: { data: _vm.services },
+                      on: { "pagination-change-page": _vm.getResults }
+                    })
+                  ],
+                  1
+                )
               ])
             ])
           ])
@@ -48533,8 +48560,8 @@ var render = function() {
           _c(
             "div",
             { staticClass: "row mt-4" },
-            _vm._l(_vm.rooms, function(room, index) {
-              return _c("div", { key: index, staticClass: "col-md-4" }, [
+            _vm._l(_vm.rooms.data, function(room) {
+              return _c("div", { key: room.id, staticClass: "col-md-4" }, [
                 _c("div", { staticClass: "card card-primary card-outline" }, [
                   _c(
                     "div",
@@ -48660,7 +48687,21 @@ var render = function() {
               ])
             }),
             0
-          )
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-12" },
+              [
+                _c("pagination", {
+                  attrs: { data: _vm.rooms },
+                  on: { "pagination-change-page": _vm.getResults }
+                })
+              ],
+              1
+            )
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -48757,7 +48798,7 @@ var render = function() {
                     _vm._v("Select Type")
                   ]),
                   _vm._v(" "),
-                  _vm._l(_vm.types, function(type) {
+                  _vm._l(_vm.types.data, function(type) {
                     return _c(
                       "option",
                       { key: type.id, domProps: { value: type.id } },

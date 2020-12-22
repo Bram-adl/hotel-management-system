@@ -18,7 +18,7 @@
                 </div>
                 
                 <div class="row mt-4">
-                    <div class="col-md-4" v-for="(room, index) in rooms" :key="index">
+                    <div class="col-md-4" v-for="(room) in rooms.data" :key="room.id">
                         <div class="card card-primary card-outline">
                             <div class="card-body box-profile">
                                 <div class="d-flex align-items-center justify-content-center flex-column" :class="room.photo ? 'text-white' : ''" style="height: 200px" :style="room.photo ? `background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.75)), url(/img/uploads/rooms/${room.photo}) center center/cover` : ''">
@@ -63,6 +63,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <pagination :data="rooms" @pagination-change-page="getResults"></pagination>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -97,7 +102,7 @@
                         }"
                     >
                         <option value="">Select Type</option>
-                        <option v-for="type in types" :key="type.id" :value="type.id">{{ type.name }}</option>
+                        <option v-for="type in types.data" :key="type.id" :value="type.id">{{ type.name }}</option>
                     </select>
                 </div>
 
@@ -148,8 +153,8 @@ export default {
     data: function () {
         return {
             method: 'create',
-            rooms: [],
-            types: [],
+            rooms: {},
+            types: {},
             form: new Form({
                 id: '',
                 photo: '',
@@ -166,16 +171,17 @@ export default {
     },
 
     methods: {
+        getResults: function (page = 1) {
+            axios.get("/api/rooms?page=" + page)
+                .then(response => {
+                    this.rooms = response.data
+                })
+        },
+        
         showCreateModal: function () {
             this.method = 'create'
             this.form.clear()
             this.form.reset()
-            this.showModal()
-        },
-
-        showEditModal: function (room) {
-            this.method = 'update'
-            this.form.fill(room)
             this.showModal()
         },
 
@@ -214,8 +220,8 @@ export default {
         
         fetchRooms: function () {
             axios.get("/api/rooms")
-                .then(({data}) => {
-                    this.rooms = data
+                .then((response) => {
+                    this.rooms = response.data
                 })
                 .catch(error => {
                     console.log(error)
@@ -224,8 +230,8 @@ export default {
 
         fetchRoomTypes: function () {
             axios.get("/api/room/types")
-                .then(({data}) => {
-                    this.types = data
+                .then((response) => {
+                    this.types = response.data
                 })
                 .catch(error => {
                     console.log(error)
@@ -244,10 +250,6 @@ export default {
                 .catch(() => {
                     this.$Progress.fail()
                 })
-        },
-
-        updateRoom: function () {
-
         },
 
         deleteRoom: function (id) {

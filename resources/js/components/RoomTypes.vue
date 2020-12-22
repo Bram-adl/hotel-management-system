@@ -196,7 +196,7 @@ export default {
     },
 
     methods: {
-        getResults(page = 1) {
+        getResults: function (page = 1) {
 			axios.get('/api/room/types?page=' + page)
 				.then(response => {
 					this.types = response.data;
