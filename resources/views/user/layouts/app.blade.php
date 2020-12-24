@@ -14,6 +14,8 @@
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/11f841f55d.js" crossorigin="anonymous"></script>
     
+    @stack('styles')
+    
     <!-- Main Styles -->
     <link rel="stylesheet" href="{{ asset('css/client/main.css') }}">
 </head>

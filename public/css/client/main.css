@@ -27,7 +27,7 @@
 
 .section .title p {
     font-size: 0.8rem;
-    opacity: .75;
+    color: rgba(51, 51, 51, 0.75);
     margin: 1rem 0;
 }
 
@@ -96,6 +96,19 @@
     .section--headlines {
         padding: 4rem 100px;
     }
+
+    .section--about {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section .title h2 {
+        font-size: 2.4rem;
+    }
+
+    .section .title p {
+        font-size: 1rem;
+        margin: 2rem 0;
+    }
     
     .section--about .images {
         grid-template-columns: repeat(2, 1fr);
@@ -103,6 +116,10 @@
 
     .section--rooms {
         grid-template-columns: repeat(4, 1fr);
+    }
+
+    .section--headlines .headlines {
+        padding: 2rem;
     }
 }
 
