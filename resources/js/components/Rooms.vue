@@ -102,7 +102,7 @@
                         }"
                     >
                         <option value="">Select Type</option>
-                        <option v-for="type in types.data" :key="type.id" :value="type.id">{{ type.name }}</option>
+                        <option v-for="type in types" :key="type.id" :value="type.id">{{ type.name }}</option>
                     </select>
                 </div>
 
@@ -229,7 +229,7 @@ export default {
         },
 
         fetchRoomTypes: function () {
-            axios.get("/api/room/types")
+            axios.get("/api/room/type")
                 .then((response) => {
                     this.types = response.data
                 })

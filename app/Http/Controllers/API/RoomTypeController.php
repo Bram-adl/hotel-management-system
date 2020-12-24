@@ -21,6 +21,14 @@ class RoomTypeController extends Controller
         return $types;
     }
 
+    public function all()
+    {
+        $types = DB::table('room_types')
+            ->get();
+    
+        return $types;
+    }
+
     /**
      * Store a newly created resource in storage.
      *

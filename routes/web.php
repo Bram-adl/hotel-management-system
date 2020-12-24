@@ -37,3 +37,5 @@ Route::get('/profile/{id}', 'Admin\DashboardController@index')->name('profile');
 | User Routes
 |--------------------------------------------------------------------------
 */
+
+Route::get('/', 'User\HomeController@index')->name('user.home');

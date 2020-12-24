@@ -28,6 +28,20 @@ class RoomController extends Controller
         return $rooms;
     }
 
+    public function all()
+    {
+        $rooms = DB::table('rooms')
+                    ->join('room_types', 'room_types.id', 'rooms.room_type_id')
+                    ->select(
+                        'rooms.id', 'rooms.name', 'rooms.amount', 'rooms.photo',
+                        'room_types.name AS type', 'room_types.price', 'room_types.size',
+                        'room_types.capacity', 'room_types.bed_type',
+                    )
+                    ->get();
+        
+        return $rooms;
+    }
+
     /**
      * Store a newly created resource in storage.
      *

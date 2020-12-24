@@ -21,6 +21,14 @@ class CustomerController extends Controller
         return $customers;
     }
 
+    public function all()
+    {
+        $customers = DB::table('customers')
+                        ->get();
+
+        return $customers;
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -124,7 +124,7 @@
                     }"
                 >
                     <option value="" selected hidden disabled>Select Customer</option>
-                    <option v-for="customer in customers.data" :key="customer.id" :value="customer.id" :selected="customer.id == form.customer_id">{{ customer.first_name + ' ' + customer.last_name }}</option>
+                    <option v-for="customer in customers" :key="customer.id" :value="customer.id" :selected="customer.id == form.customer_id">{{ customer.first_name + ' ' + customer.last_name }}</option>
                 </select>
                 <has-error :form="form" field="customer_id"></has-error>
             </div>
@@ -140,7 +140,7 @@
                     }"
                 >
                     <option value="" selected hidden disabled>Select Room</option>
-                    <option v-for="room in rooms.data" :key="room.id" :value="room.id" :selected="room.id == form.room_id">{{ room.name }}</option>
+                    <option v-for="room in rooms" :key="room.id" :value="room.id" :selected="room.id == form.room_id">{{ room.name }}</option>
                 </select>
                 <has-error :form="form" field="room_id"></has-error>
             </div>
@@ -268,7 +268,7 @@ export default {
         },
 
         fetchCustomers: function () {
-            axios.get("/api/customers")
+            axios.get("/api/customer")
                 .then(({ data }) => {
                     this.customers = data
                 })
@@ -278,7 +278,7 @@ export default {
         },
 
         fetchRooms: function () {
-            axios.get("/api/rooms")
+            axios.get("/api/room")
                 .then(({ data }) => {
                     this.rooms = data
                 })

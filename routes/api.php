@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/customer', 'API\CustomerController@all');
+Route::get('/room', 'API\RoomController@all');
+Route::get('/room/type', 'API\RoomTypeController@all');
+
 Route::apiResources([
     'users' => 'API\UserController',
     'customers' => 'API\CustomerController',

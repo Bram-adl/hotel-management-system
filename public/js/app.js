@@ -2856,7 +2856,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchCustomers: function fetchCustomers() {
       var _this2 = this;
 
-      axios.get("/api/customers").then(function (_ref) {
+      axios.get("/api/customer").then(function (_ref) {
         var data = _ref.data;
         _this2.customers = data;
       })["catch"](function (error) {
@@ -2866,7 +2866,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchRooms: function fetchRooms() {
       var _this3 = this;
 
-      axios.get("/api/rooms").then(function (_ref2) {
+      axios.get("/api/room").then(function (_ref2) {
         var data = _ref2.data;
         _this3.rooms = data;
       })["catch"](function (error) {
@@ -4030,7 +4030,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchRoomTypes: function fetchRoomTypes() {
       var _this4 = this;
 
-      axios.get("/api/room/types").then(function (response) {
+      axios.get("/api/room/type").then(function (response) {
         _this4.types = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -47286,7 +47286,7 @@ var render = function() {
                     [_vm._v("Select Customer")]
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.customers.data, function(customer) {
+                  _vm._l(_vm.customers, function(customer) {
                     return _c(
                       "option",
                       {
@@ -47370,7 +47370,7 @@ var render = function() {
                     [_vm._v("Select Room")]
                   ),
                   _vm._v(" "),
-                  _vm._l(_vm.rooms.data, function(room) {
+                  _vm._l(_vm.rooms, function(room) {
                     return _c(
                       "option",
                       {
@@ -48860,7 +48860,7 @@ var render = function() {
                     _vm._v("Select Type")
                   ]),
                   _vm._v(" "),
-                  _vm._l(_vm.types.data, function(type) {
+                  _vm._l(_vm.types, function(type) {
                     return _c(
                       "option",
                       { key: type.id, domProps: { value: type.id } },
