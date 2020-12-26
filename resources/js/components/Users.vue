@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-3">
                     <div class="col-md-12 text-right">
-                        <button class="btn btn-success" @click="showModal(form)">
+                        <button class="btn btn-success" @click="showCreateModal">
                             Add new user
                         </button>
                     </div>
@@ -202,6 +202,13 @@ export default {
                 .then(response => {
                     this.users = response.data
                 })
+        },
+
+        showCreateModal: function () {
+            this.method = 'create'
+            this.form.reset()
+            this.form.clear()
+            this.showModal()
         },
         
         profilePicture: function(user) {

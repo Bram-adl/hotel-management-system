@@ -57,38 +57,38 @@
 </div>
 
 <div class="section section--rooms">
-    @for ($i = 0; $i < 4; $i++)
-    <div class="card card--room" data-aos="zoom-in" data-aos-duration="1200" data-aos-offset="250" data-aos-delay="{{ $i * 50 }}">
+    @foreach ($rooms as $key=>$room)
+    <div class="card card--room" data-aos="zoom-in" data-aos-duration="1200" data-aos-offset="250" data-aos-delay="{{ $key * 50 }}" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/img/uploads/rooms/{{ $room->photo }}') center center/cover;">
         <div class="card-header">
-            <h3>Grand Hill Double Room</h3>
+            <h3>{{ $room->name }}</h3>
         </div>
         <div class="card-body">
             <div class="price">
                 <p>Price</p>
-                <p>$ 167.88 <span>/pernight</span></p>
+                <p>$ {{ $room->price }} <span>/pernight</span></p>
             </div>
             <div class="type">
                 <p>Type</p>
-                <p>Double Room</p>
+                <p>{{ $room->type }}</p>
             </div>
             <div class="size">
                 <p>Size</p>
-                <p>48 m<sup>2</sup></p>
+                <p>{{ $room->size }} m<sup>2</sup></p>
             </div>
             <div class="capacity">
                 <p>Capacity</p>
-                <p>Maximum 2 person(s)</p>
+                <p>Maximum {{ $room->capacity }} person(s)</p>
             </div>
             <div class="bed-type">
                 <p>Bed Type</p>
-                <p>Two Single Beds</p>
+                <p>{{ $room->bed_type }}</p>
             </div>
         </div>
         <div class="card-footer">
-            <a href="#" class="btn btn--link">Read More</a>
+            <a href="/room/{{ $room->id }}" class="btn btn--link">Read More</a>
         </div>
     </div>
-    @endfor
+    @endforeach
 </div>
 
 <div class="section section--headlines">
@@ -105,17 +105,8 @@
 <script>
     // AOS
     AOS.init();
-    
-    // Hamburger Menu
-    const hamburger = document.querySelector('.hamburger')
-    const hamburgerLink = document.querySelector('.hamburger-link')
-    const hamburgerClose = document.querySelector('.hamburger-close')
 
-    hamburger.addEventListener('click', () => {
-        hamburgerLink.classList.add('show')
-    })
-    hamburgerClose.addEventListener('click', () => {
-        hamburgerLink.classList.remove('show')
-    })
+    // Active Menu
+    document.querySelector('[data-link="/"]').classList.add('active')
 </script>
 @endpush

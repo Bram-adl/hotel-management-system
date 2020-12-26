@@ -56,20 +56,20 @@
             </div>
             <div class="nav-bottom--right">
                 <ul class="nav-link">
-                    <li class="nav-item active"><a href="#">Home</a></li>
-                    <li class="nav-item"><a href="#">Rooms</a></li>
-                    <li class="nav-item"><a href="#">About Us</a></li>
-                    <li class="nav-item"><a href="#">Contact Us</a></li>
+                    <li class="nav-item" data-link="/"><a href="/">Home</a></li>
+                    <li class="nav-item" data-link="/our-rooms"><a href="/our-rooms">Rooms</a></li>
+                    <li class="nav-item" data-link="/about-us"><a href="/about-us">About Us</a></li>
+                    <li class="nav-item" data-link="/contact-us"><a href="/contact-us">Contact Us</a></li>
                 </ul>
                 <div class="hamburger">
                     <i class="fas fa-bars"></i>
                 </div>
                 <ul class="hamburger-link">
                     <i class="fas fa-times hamburger-close"></i>
-                    <li class="hamburger-item active"><a href="#">Home</a></li>
-                    <li class="hamburger-item"><a href="#">Rooms</a></li>
-                    <li class="hamburger-item"><a href="#">About Us</a></li>
-                    <li class="hamburger-item"><a href="#">Contact Us</a></li>
+                    <li class="hamburger-item active"><a href="/">Home</a></li>
+                    <li class="hamburger-item"><a href="/our-rooms">Rooms</a></li>
+                    <li class="hamburger-item"><a href="/about-us">About Us</a></li>
+                    <li class="hamburger-item"><a href="/contact-us">Contact Us</a></li>
                 </ul>
             </div>
         </div>
@@ -135,5 +135,18 @@
     </footer>
     
     @stack('scripts')
+    <script>
+        // Hamburger Menu
+        const hamburger = document.querySelector('.hamburger')
+        const hamburgerLink = document.querySelector('.hamburger-link')
+        const hamburgerClose = document.querySelector('.hamburger-close')
+
+        hamburger.addEventListener('click', () => {
+            hamburgerLink.classList.add('show')
+        })
+        hamburgerClose.addEventListener('click', () => {
+            hamburgerLink.classList.remove('show')
+        })
+    </script>
 </body>
 </html>

@@ -260,7 +260,7 @@ export default {
 
         fetchRoomTypes: function() {
             axios
-                .get("/api/room/types")
+                .get("/api/room/type")
                 .then(({ data }) => {
                     this.types = data;
                 })

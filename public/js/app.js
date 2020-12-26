@@ -3221,7 +3221,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchRoomTypes: function fetchRoomTypes() {
       var _this4 = this;
 
-      axios.get("/api/room/types").then(function (_ref2) {
+      axios.get("/api/room/type").then(function (_ref2) {
         var data = _ref2.data;
         _this4.types = data;
       })["catch"](function (error) {
@@ -4293,6 +4293,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.get("/api/users?page=" + page).then(function (response) {
         _this.users = response.data;
       });
+    },
+    showCreateModal: function showCreateModal() {
+      this.method = 'create';
+      this.form.reset();
+      this.form.clear();
+      this.showModal();
     },
     profilePicture: function profilePicture(user) {
       if (user.profile_picture != null) {
@@ -48992,11 +48998,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-success",
-                  on: {
-                    click: function($event) {
-                      return _vm.showModal(_vm.form)
-                    }
-                  }
+                  on: { click: _vm.showCreateModal }
                 },
                 [
                   _vm._v(

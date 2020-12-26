@@ -39,3 +39,8 @@ Route::get('/profile/{id}', 'Admin\DashboardController@index')->name('profile');
 */
 
 Route::get('/', 'User\HomeController@index')->name('user.home');
+Route::get('/our-rooms', 'User\HomeController@rooms')->name('user.rooms');
+Route::get('/room/{id}', 'User\HomeController@room')->name('user.room');
+Route::post('/room/{id}', 'User\HomeController@bookRoom')->name('user.bookRoom');
+Route::get('/about-us', 'User\HomeController@aboutUs')->name('user.rooms');
+Route::get('/contact-us', 'User\HomeController@contactUs')->name('user.rooms');
